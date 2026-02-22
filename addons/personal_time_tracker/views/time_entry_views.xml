@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_personal_time_entry_list" model="ir.ui.view">
+        <field name="name">personal.time.entry.list</field>
+        <field name="model">personal.time.entry</field>
+        <field name="arch" type="xml">
+            <list string="Time Entries" default_order="start_time desc"
+                  decoration-success="is_running">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="user_id" groups="project.group_project_manager"/>
+                <field name="start_time"/>
+                <field name="end_time"/>
+                <field name="duration_hours" invisible="is_running" widget="float_time"
+                       string="Duration"/>
+                <field name="live_duration_hours" invisible="not is_running" widget="float_time"
+                       string="Live"/>
+                <field name="is_running" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_personal_time_entry_form" model="ir.ui.view">
+        <field name="name">personal.time.entry.form</field>
+        <field name="model">personal.time.entry</field>
+        <field name="arch" type="xml">
+            <form string="Time Entry">
+                <header>
+                    <button name="action_start"
+                            type="object"
+                            string="Start"
+                            class="btn-primary"
+                            invisible="is_running or end_time"
+                    />
+                    <button name="action_stop"
+                            type="object"
+                            string="Stop"
+                            class="btn-danger"
+                            invisible="not is_running"
+                    />
+                    <button name="action_continue"
+                            type="object"
+                            string="Continue"
+                            class="btn-secondary"
+                            invisible="is_running or not end_time"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- TODO: add today_count, week_count, month_count -->
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_id"/>
+                            <field name="user_id" groups="project.group_project_manager"/>
+                            <field name="is_running" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="start_time"
+                                   options="{'rounding': 60}"
+                                   readonly="is_running"/>
+
+                            <field name="end_time"
+                                   options="{'rounding': 60}"
+                                   readonly="is_running"/>
+                            <field name="duration_hours" widget="float_time" readonly="1"
+                                   string="Duration" invisible="is_running"/>
+                            <field name="live_duration_hours" widget="float_time" readonly="1"
+                                   string="Live Duration" invisible="not is_running"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_personal_time_entry_search" model="ir.ui.view">
+        <field name="name">personal.time.entry.search</field>
+        <field name="model">personal.time.entry</field>
+        <field name="arch" type="xml">
+            <search string="Search Time Entries">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="user_id"/>
+                <filter name="my_entries" string="My Entries" domain="[('user_id', '=', uid)]"/>
+                <filter name="running" string="Running" domain="[('is_running', '=', True)]"/>
+                <separator/>
+                <!-- TODO: Add filters week/month -->
+
+                <filter name="today" string="Today"
+                        domain="[
+        ('start_time', '&gt;=', context_today()),
+        ('start_time', '&lt;', context_today() + relativedelta(days=1))
+    ]"
+                />
+                <!-- TODO: Add Group By -->
+            </search>
+        </field>
+    </record>
+
+</odoo>

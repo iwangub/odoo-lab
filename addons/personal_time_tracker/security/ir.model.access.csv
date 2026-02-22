@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_personal_time_entry_user,personal.time.entry user,model_personal_time_entry,base.group_user,1,1,1,1
+access_personal_time_entry_manager,personal.time.entry manager,model_personal_time_entry,project.group_project_manager,1,1,1,1
