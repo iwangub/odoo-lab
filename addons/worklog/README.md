@@ -1,4 +1,4 @@
-# Personal Time Tracker (Odoo 18)
+# Worklog (Odoo 18)
 
 A lightweight module to track how much time you invest in your own side projects.
 
