@@ -16,7 +16,6 @@ venv/
 *.log
 *.pid
 filestore/
-odoo.conf
 
 # -------------------
 # IDE
