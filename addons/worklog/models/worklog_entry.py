@@ -1,12 +1,10 @@
-from datetime import datetime, time, timedelta
-
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
-class PersonalTimeEntry(models.Model):
-    _name = "personal.time.entry"
-    _description = "Personal Time Entry"
+class WorklogEntry(models.Model):
+    _name = "worklog.entry"
+    _description = "Worklog Entry"
     _order = "start_time desc"
 
     name = fields.Char(
@@ -22,9 +20,14 @@ class PersonalTimeEntry(models.Model):
     )
 
     project_id = fields.Many2one(
-        comodel_name="project.project",
+        comodel_name="worklog.project",
         string="Project",
         required=True,
+    )
+
+    tag_ids = fields.Many2many(
+        comodel_name="worklog.tag",
+        string="Tags",
     )
 
     start_time = fields.Datetime(
@@ -164,8 +167,8 @@ class PersonalTimeEntry(models.Model):
 
         return {
             "type": "ir.actions.act_window",
-            "name": "Time Entry",
-            "res_model": "personal.time.entry",
+            "name": "Worklog Entry",
+            "res_model": "worklog.entry",
             "view_mode": "form",
             "res_id": new_entry.id,
             "target": "current",

@@ -24,7 +24,8 @@ services:
       - "${ODOO_PORT:-8069}:8069"
     volumes:
       - odoo_data:/var/lib/odoo
-      - ./addons:/mnt/extra-addons:ro
+      # Dev only: live-reload addons without rebuild
+      # - ./addons:/mnt/extra-addons:ro
     environment:
       HOST: db
       USER: ${POSTGRES_USER:-odoo}

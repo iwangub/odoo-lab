@@ -20,17 +20,17 @@ Most time trackers are heavy. This module keeps it simple:
 
 1. Place module in your addons path.
 2. Update apps list.
-3. Install **Personal Time Tracker**.
+3. Install **Worklog**.
 
 CLI example:
 
 ```bash
-./odoo-bin -d <db_name> -i personal_time_tracker
+./odoo-bin -d <db_name> -i worklog
 ```
 
 ## Usage
 
-1. Open `Personal Time -> Time Entries`.
+1. Open `Worklog -> worklog`.
 2. Create a time entry with description + project.
 3. Use `Start` and `Stop` in the form header.
 
