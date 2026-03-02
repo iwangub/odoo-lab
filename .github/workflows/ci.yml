@@ -5,7 +5,17 @@ on:
     branches: [18.0-dev]
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: check addons/
+
   test:
+    needs: lint
     name: Test
     runs-on: ubuntu-latest
 
