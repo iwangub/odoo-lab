@@ -10,34 +10,17 @@ Odoo 18 DevOps portfolio project — custom module development, Docker packaging
 | Database   | PostgreSQL 14           |
 | Container  | Docker + Compose        |
 | CI         | GitHub Actions          |
-| Registry   | GitHub Container Registry (ghcr.io) |
 
-## Architecture
-
-```
-┌─────────────────────────────────┐
-│         docker-compose          │
-│                                 │
-│  ┌─────────┐    ┌────────────┐  │
-│  │  odoo   │───▶│ postgresql │  │
-│  │ :18.0   │    │    :14     │  │
-│  └─────────┘    └────────────┘  │
-│       │                         │
-│  /mnt/extra-addons/worklog      │
-└─────────────────────────────────┘
-```
-
-Custom module `worklog` is baked into the image at build time via `COPY addons/ /mnt/extra-addons/`.
-
-## Module: worklog
+## Module: Worklog
 
 Lightweight time tracking for projects and technologies.
 
-- Log time entries per project (Odoo, Azure, Django, ...)
-- Tag entries by technology (Python, Docker, CI/CD, ...)
+- Log time entries per project (odoo_lab, weather-app, ...)
+- Link entries to technologies (Python, Docker, Django, ...)
 - Computed total time per project
 - Start / Stop / Continue timer actions
 - One running timer per user enforced
+- Module baked into the image at build time
 
 ## Prerequisites
 
@@ -72,35 +55,6 @@ make test     # Run Odoo module tests
 
 On every push to `18.0-dev`:
 
-1. Build the Docker image
-2. Run Odoo module tests (`worklog` only)
-
-```
-push to 18.0-dev
-       ↓
-  Build image
-       ↓
-  Run tests
-```
-
-## Project Structure
-
-```
-odoo_lab/
-├── .github/workflows/ci.yml   # GitHub Actions pipeline
-├── addons/
-│   └── worklog/               # Custom Odoo module
-│       ├── models/
-│       │   ├── worklog_entry.py
-│       │   ├── worklog_project.py
-│       │   └── worklog_tag.py
-│       ├── views/
-│       ├── security/
-│       └── tests/
-├── docker/
-│   ├── Dockerfile
-│   └── odoo.conf
-├── docker-compose.yml
-├── Makefile
-└── .env.example
-```
+1. Lint with `ruff`
+2. Build the Docker image
+3. Run Odoo module tests (`worklog` only)
