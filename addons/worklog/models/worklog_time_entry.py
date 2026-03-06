@@ -2,9 +2,9 @@ from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
-class WorklogEntry(models.Model):
-    _name = "worklog.entry"
-    _description = "Worklog Entry"
+class WorklogTimeEntry(models.Model):
+    _name = "worklog.time.entry"
+    _description = "Worklog Time Entry"
     _order = "start_time desc"
 
     name = fields.Char(
@@ -25,9 +25,9 @@ class WorklogEntry(models.Model):
         required=True,
     )
 
-    tag_ids = fields.Many2many(
-        comodel_name="worklog.tag",
-        string="Tags",
+    technology_ids = fields.Many2many(
+        comodel_name="worklog.technology",
+        string="Technology",
     )
 
     start_time = fields.Datetime(
@@ -167,8 +167,8 @@ class WorklogEntry(models.Model):
 
         return {
             "type": "ir.actions.act_window",
-            "name": "Worklog Entry",
-            "res_model": "worklog.entry",
+            "name": "Worklog Time Entry",
+            "res_model": "worklog.time.entry",
             "view_mode": "form",
             "res_id": new_entry.id,
             "target": "current",

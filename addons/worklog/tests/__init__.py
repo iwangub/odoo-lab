@@ -1,1 +1,1 @@
-from . import test_worklog_entry
+from . import test_worklog_time_entry

@@ -1,4 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_worklog_entry_user,worklog.entry user,model_worklog_entry,base.group_user,1,1,1,1
+access_worklog_time_entry_user,worklog.time.entry user,model_worklog_time_entry,base.group_user,1,1,1,1
 access_worklog_project_user,worklog.project user,model_worklog_project,base.group_user,1,1,1,1
-access_worklog_tag_user,worklog.tag user,model_worklog_tag,base.group_user,1,1,1,1
+access_worklog_technology_user,worklog.technology user,model_worklog_technology,base.group_user,1,1,1,1

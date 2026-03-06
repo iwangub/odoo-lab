@@ -5,12 +5,12 @@ from odoo.fields import Datetime
 from odoo.tests.common import TransactionCase
 
 
-class TestWorklogEntry(TransactionCase):
+class TestWorklogTimeEntry(TransactionCase):
 
     def setUp(self):
         super().setUp()
         self.project = self.env["worklog.project"].create({"name": "Test Project"})
-        self.entry = self.env["worklog.entry"].create({
+        self.entry = self.env["worklog.time.entry"].create({
             "name": "Test Entry",
             "project_id": self.project.id,
         })
@@ -36,7 +36,7 @@ class TestWorklogEntry(TransactionCase):
 
     def test_single_running_entry_constraint(self):
         self.entry.action_start()
-        second = self.env["worklog.entry"].create({
+        second = self.env["worklog.time.entry"].create({
             "name": "Second Entry",
             "project_id": self.project.id,
         })

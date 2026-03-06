@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_worklog_technology_list" model="ir.ui.view">
+        <field name="name">worklog.technology.list</field>
+        <field name="model">worklog.technology</field>
+        <field name="arch" type="xml">
+            <list string="technologies">
+                <field name="name"/>
+                <field name="color"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_worklog_technology_form" model="ir.ui.view">
+        <field name="name">worklog.technology.form</field>
+        <field name="model">worklog.technology</field>
+        <field name="arch" type="xml">
+            <form string="technology">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="color"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--    <record id="view_worklog_technology_search" model="ir.ui.view">-->
+    <!--        <field name="name">worklog.technology.search</field>-->
+<!--        <field name="model">worklog.technology</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search technologies">-->
+<!--                <field name="name"/>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+</odoo>

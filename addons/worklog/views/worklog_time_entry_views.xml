@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_worklog_entry_list" model="ir.ui.view">
-        <field name="name">worklog.entry.list</field>
-        <field name="model">worklog.entry</field>
+    <record id="view_worklog_time_entry_list" model="ir.ui.view">
+        <field name="name">worklog.time.entry.list</field>
+        <field name="model">worklog.time.entry</field>
         <field name="arch" type="xml">
             <list string="Worklog" default_order="start_time desc"
                   decoration-success="is_running">
                 <field name="name"/>
                 <field name="project_id"/>
-                <field name="tag_ids" widget="many2many_tags"
+                <field name="technology_ids" widget="many2many_tags"
                        options="{'color_field': 'color'}"/>
                 <field name="user_id" groups="base.group_system"/>
                 <field name="start_time"/>
@@ -22,9 +22,9 @@
         </field>
     </record>
 
-    <record id="view_worklog_entry_form" model="ir.ui.view">
-        <field name="name">worklog.entry.form</field>
-        <field name="model">worklog.entry</field>
+    <record id="view_worklog_time_entry_form" model="ir.ui.view">
+        <field name="name">worklog.time.entry.form</field>
+        <field name="model">worklog.time.entry</field>
         <field name="arch" type="xml">
             <form string="Worklog Entry">
                 <header>
@@ -55,7 +55,7 @@
                         <group>
                             <field name="name"/>
                             <field name="project_id"/>
-                            <field name="tag_ids" widget="many2many_tags"
+                            <field name="technology_ids" widget="many2many_tags"
                                    options="{'color_field': 'color'}"/>
                             <field name="user_id" groups="base.group_system"/>
                             <field name="is_running" readonly="1"/>
@@ -78,14 +78,14 @@
         </field>
     </record>
 
-    <record id="view_worklog_entry_search" model="ir.ui.view">
-        <field name="name">worklog.entry.search</field>
-        <field name="model">worklog.entry</field>
+    <record id="view_worklog_time_entry_search" model="ir.ui.view">
+        <field name="name">worklog.time.entry.search</field>
+        <field name="model">worklog.time.entry</field>
         <field name="arch" type="xml">
             <search string="Search Worklog">
                 <field name="name"/>
                 <field name="project_id"/>
-                <field name="tag_ids"/>
+                <field name="technology_ids"/>
                 <field name="user_id"/>
                 <filter name="my_entries" string="My Entries" domain="[('user_id', '=', uid)]"/>
                 <filter name="running" string="Running" domain="[('is_running', '=', True)]"/>

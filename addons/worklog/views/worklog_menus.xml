@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+        <record id="action_worklog_technology" model="ir.actions.act_window">
+        <field name="name">Technologies</field>
+        <field name="res_model">worklog.technology</field>
+        <field name="view_mode">list,form</field>
+<!--        <field name="search_view_id" ref="view_worklog_project_search"/>-->
+    </record>
+
     <record id="action_worklog_projects" model="ir.actions.act_window">
         <field name="name">Projects</field>
         <field name="res_model">worklog.project</field>
@@ -7,11 +14,11 @@
         <field name="search_view_id" ref="view_worklog_project_search"/>
     </record>
 
-    <record id="action_worklog_entries" model="ir.actions.act_window">
-        <field name="name">Worklog</field>
-        <field name="res_model">worklog.entry</field>
+    <record id="action_worklog_time_entries" model="ir.actions.act_window">
+        <field name="name">Time Entries</field>
+        <field name="res_model">worklog.time.entry</field>
         <field name="view_mode">list,form</field>
-        <field name="search_view_id" ref="view_worklog_entry_search"/>
+        <field name="search_view_id" ref="view_worklog_time_entry_search"/>
         <field name="context">{'search_default_my_entries': 1}</field>
     </record>
 
@@ -27,10 +34,10 @@
               sequence="10"
               groups="base.group_user"/>
 
-    <menuitem id="menu_worklog_entries"
-              name="Worklog"
+    <menuitem id="menu_worklog_time_entries"
+              name="Time Entries"
               parent="menu_worklog_root"
-              action="action_worklog_entries"
+              action="action_worklog_time_entries"
               sequence="20"
               groups="base.group_user"/>
 </odoo>

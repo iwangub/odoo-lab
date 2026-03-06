@@ -1,13 +1,13 @@
 from odoo import fields, models
 
 
-class WorklogTag(models.Model):
-    _name = "worklog.tag"
-    _description = "Worklog Tag"
+class WorklogTechnology(models.Model):
+    _name = "worklog.technology"
+    _description = "Worklog technology"
     _order = "name"
 
     name = fields.Char(
-        string="Tag",
+        string="technology",
         required=True,
     )
 

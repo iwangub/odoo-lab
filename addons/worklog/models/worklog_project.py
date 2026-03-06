@@ -16,7 +16,7 @@ class WorklogProject(models.Model):
     )
 
     entry_ids = fields.One2many(
-        comodel_name="worklog.entry",
+        comodel_name="worklog.time.entry",
         inverse_name="project_id",
         string="Entries",
     )

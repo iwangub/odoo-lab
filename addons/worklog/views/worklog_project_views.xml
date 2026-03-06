@@ -35,7 +35,7 @@
                                     <field name="name"/>
                                     <field name="start_time"/>
                                     <field name="end_time"/>
-                                    <field name="tag_ids" widget="many2many_tags"
+                                    <field name="technology_ids" widget="many2many_tags"
                                            options="{'color_field': 'color'}"/>
                                     <field name="duration_hours" widget="float_time"
                                            string="Duration" invisible="is_running"/>
