@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="worklog.worklog_technology_python" model="worklog.technology">
+            <field name="name">Python</field>
+        </record>
+        <record id="worklog.worklog_technology_fast_api" model="worklog.technology">
+            <field name="name">FastAPI</field>
+        </record>
+        <record id="worklog.worklog_technology_fast_django" model="worklog.technology">
+            <field name="name">Django</field>
+        </record>
+        <record id="worklog.worklog_technology_odoo" model="worklog.technology">
+            <field name="name">Odoo</field>
+        </record>
+        <record id="worklog.worklog_technology_docker" model="worklog.technology">
+            <field name="name">Docker</field>
+        </record>
+        <record id="worklog.worklog_technology_linux" model="worklog.technology">
+            <field name="name">Linux</field>
+        </record>
+        <record id="worklog.worklog_technology_ci_ci" model="worklog.technology">
+            <field name="name">CI/CD</field>
+        </record>
+        <record id="worklog.worklog_technology_iac" model="worklog.technology">
+            <field name="name">IaC</field>
+        </record>
+        <record id="worklog.worklog_technology_k8s" model="worklog.technology">
+            <field name="name">k8s</field>
+        </record>
+        <record id="worklog.worklog_technology_azure" model="worklog.technology">
+            <field name="name">Azure</field>
+        </record>
+        <record id="worklog.worklog_technology_postgresql" model="worklog.technology">
+            <field name="name">PostgreSQL</field>
+        </record>
+        <record id="worklog.worklog_technology_javasrcipt" model="worklog.technology">
+            <field name="name">JavaScript</field>
+        </record>
+    </data>
+</odoo>

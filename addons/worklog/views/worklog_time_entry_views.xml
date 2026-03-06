@@ -8,9 +8,8 @@
                   decoration-success="is_running">
                 <field name="name"/>
                 <field name="project_id"/>
-                <field name="technology_ids" widget="many2many_tags"
-                       options="{'color_field': 'color'}"/>
-                <field name="user_id" groups="base.group_system"/>
+                <field name="technology_ids" widget="many2many_tags"/>
+                <field name="user_id" groups="base.group_system" optional="hide"/>
                 <field name="start_time"/>
                 <field name="end_time"/>
                 <field name="duration_hours" invisible="is_running" widget="float_time"
@@ -55,8 +54,7 @@
                         <group>
                             <field name="name"/>
                             <field name="project_id"/>
-                            <field name="technology_ids" widget="many2many_tags"
-                                   options="{'color_field': 'color'}"/>
+                            <field name="technology_ids" widget="many2many_tags"/>
                             <field name="user_id" groups="base.group_system"/>
                             <field name="is_running" readonly="1"/>
                         </group>

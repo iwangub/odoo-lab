@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="view_worklog_project_kanban" model="ir.ui.view">
+        <field name="name">worklog.project.kanban</field>
+        <field name="model">worklog.project</field>
+        <field name="arch" type="xml">
+            <kanban string="Projects">
+                <field name="name"/>
+                <field name="total_time_hours"/>
+                <field name="description"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_card">
+                            <strong>
+                                <field name="name"/>
+                            </strong>
+                            <div class="text-muted">
+                                <field name="description"/>
+                            </div>
+                            <div class="mt-2">
+                                <span>Total time</span><field name="total_time_hours" widget="float_time"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
     <record id="view_worklog_project_list" model="ir.ui.view">
         <field name="name">worklog.project.list</field>
         <field name="model">worklog.project</field>
@@ -29,14 +57,13 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Entries">
-                            <field name="entry_ids" readonly="1">
+                        <page string="Time Entries">
+                            <field name="entry_ids">
                                 <list>
                                     <field name="name"/>
                                     <field name="start_time"/>
                                     <field name="end_time"/>
-                                    <field name="technology_ids" widget="many2many_tags"
-                                           options="{'color_field': 'color'}"/>
+                                    <field name="technology_ids" widget="many2many_tags"/>
                                     <field name="duration_hours" widget="float_time"
                                            string="Duration" invisible="is_running"/>
                                     <field name="live_duration_hours" widget="float_time"

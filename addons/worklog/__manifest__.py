@@ -15,6 +15,7 @@ Log entries per project and tag them by technology (Python, Docker, CI/CD, ...).
     ],
     "data": [
         "data/data.xml",
+        "data/technology_data.xml",
         "security/worklog_security.xml",
         "security/ir.model.access.csv",
         "views/worklog_project_views.xml",

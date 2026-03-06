@@ -27,7 +27,7 @@ class WorklogTimeEntry(models.Model):
 
     technology_ids = fields.Many2many(
         comodel_name="worklog.technology",
-        string="Technology",
+        string="Technologies",
     )
 
     start_time = fields.Datetime(

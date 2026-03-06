@@ -4,7 +4,7 @@ A lightweight module to track how much time you invest in your own side projects
 
 ## Why this module
 
-Most time trackers are heavy. This module keeps it simple:
+Most Odoo time trackers are heavy. This module keeps it simple:
 - Create an entry, hit Start/Stop, done.
 - See where your time goes across projects.
 - Keep data clean with overlap checks and one running timer per user.
@@ -30,7 +30,7 @@ CLI example:
 
 ## Usage
 
-1. Open `Worklog -> worklog`.
+1. Open `Worklog -> Time Entries`.
 2. Create a time entry with description + project.
 3. Use `Start` and `Stop` in the form header.
 
