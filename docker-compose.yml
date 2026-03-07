@@ -2,7 +2,7 @@ services:
   db:
     image: postgres:14
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-odoo}
+      POSTGRES_DB: postgres
       POSTGRES_USER: ${POSTGRES_USER:-odoo}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
@@ -40,20 +40,18 @@ services:
 #      - "${ODOO_PORT:-8069}:8069"
     volumes:
       - odoo_data:/var/lib/odoo
-      # Dev only: live-reload addons without rebuild
-      # - ./addons:/mnt/extra-addons:ro
+#       Dev only: live-reload addons without rebuild
+#       - ./addons:/mnt/extra-addons:ro
     environment:
       HOST: db
       USER: ${POSTGRES_USER:-odoo}
       PASSWORD: ${POSTGRES_PASSWORD}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-    command: odoo -i base
     depends_on:
       db:
         condition: service_healthy
     healthcheck:
       test: [ "CMD-SHELL", "curl -sf http://localhost:8069/web/health || exit 1" ]
-      # test: ["CMD-SHELL", "curl -sf http://localhost:8069/web/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
