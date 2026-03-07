@@ -34,7 +34,7 @@
         <record id="worklog.worklog_technology_postgresql" model="worklog.technology">
             <field name="name">PostgreSQL</field>
         </record>
-        <record id="worklog.worklog_technology_javasrcipt" model="worklog.technology">
+        <record id="worklog.worklog_technology_javascript" model="worklog.technology">
             <field name="name">JavaScript</field>
         </record>
     </data>

@@ -34,4 +34,4 @@ class WorklogTechnology(models.Model):
     def _compute_total_hours(self):
         for rec in self:
             res = rec.entry_ids.mapped("duration_hours")
-            rec.invested_time_total_hours = sum(res) if res else None
+            rec.invested_time_total_hours = sum(res) if res else 0.0
