@@ -1,10 +1,7 @@
 FROM odoo:18.0
-
-LABEL org.opencontainers.image.description="Odoo 18.0 with personal_time_tracker Module"
+LABEL org.opencontainers.image.description="Odoo 18.0 with Worklog Module"
 LABEL org.opencontainers.image.source="https://github.com/iwangub/odoo_lab"
 
-COPY addons/ /mnt/extra-addons/
-
+COPY --chown=odoo:odoo addons/ /mnt/extra-addons/
 COPY --chown=odoo:odoo docker/odoo.conf /etc/odoo/odoo.conf
-
 USER odoo
