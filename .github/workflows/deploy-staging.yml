@@ -1,0 +1,66 @@
+name: Deploy Staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-push:
+    name: Build & Push Image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    outputs:
+      image: ${{ steps.meta.outputs.tags }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=sha,prefix=sha-
+            type=raw,value=latest
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+  deploy-staging:
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > /tmp/private_key
+          chmod 600 /tmp/private_key
+
+      # TODO: Harden deployment user – replace docker group membership with sudoers whitelist
+      # 'docker run -v /:/host -it alpine chroot /host' will make anyone root
+      # See: /etc/sudoers.d/{{ secrets.STAGING_HOST }} → allow only 'docker compose pull' and 'docker compose up
+      - name: Deploy via SSH
+        run: |
+          ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
+            deploy@${{ secrets.STAGING_HOST }} \
+            'cd /opt/odoo && docker compose pull odoo && docker compose up -d --no-deps odoo'
+
+      - name: Health check
+        run: |
+          sleep 40
+          curl -f https://odoo.dev-lab.dev/web/health || exit 1
+
+      - name: Cleanup
+        if: always()
+        run: rm -f /tmp/private_key

@@ -1,0 +1,30 @@
+name: Deploy Config
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy config files
+        run: |
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > /tmp/private_key
+          chmod 600 /tmp/private_key
+          
+          ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
+            deploy@${{ secrets.STAGING_HOST }} 'mkdir -p /opt/odoo/nginx'
+          
+          scp -i /tmp/private_key -o StrictHostKeyChecking=no \
+            docker-compose.yml \
+            deploy@${{ secrets.STAGING_HOST }}:/opt/odoo/
+          
+          scp -i /tmp/private_key -o StrictHostKeyChecking=no \
+            nginx/nginx.conf \
+            deploy@${{ secrets.STAGING_HOST }}:/opt/odoo/nginx/
+
+      - name: Cleanup
+        if: always()
+        run: rm -f /tmp/private_key
