@@ -60,7 +60,7 @@ jobs:
         run: |
           ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
             deploy@${{ secrets.STAGING_HOST }} \
-            'cd /opt/odoo && docker compose exec odoo odoo -u worklog -d odoo --stop-after-init --no-http'
+            'cd /opt/odoo && docker compose run --rm odoo odoo -u worklog --stop-after-init --no-http'
 
       - name: Health check
         run: |
