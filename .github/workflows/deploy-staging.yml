@@ -56,6 +56,12 @@ jobs:
             deploy@${{ secrets.STAGING_HOST }} \
             'cd /opt/odoo && docker compose pull odoo && docker compose up -d --no-deps odoo'
 
+      - name: Update Worklog module
+        run: |
+          ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
+            deploy@${{ secrets.STAGING_HOST }} \
+            'cd /opt/odoo && docker compose exec odoo odoo -u worklog --stop-after-init --no-http'
+
       - name: Health check
         run: |
           sleep 40
