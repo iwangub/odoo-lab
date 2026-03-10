@@ -8,7 +8,7 @@ Log entries per project and tag them by technology (Python, Docker, CI/CD, ...).
     """,
     "author": "Iwan Gubler",
     "license": "LGPL-3",
-    "website": "https://github.com/iwangub/odoo_lab",
+    "website": "https://github.com/iwangub/odoo-lab",
     "category": "Productivity",
     "depends": [
         "web",

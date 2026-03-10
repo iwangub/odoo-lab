@@ -32,7 +32,7 @@ services:
       - odoo-net
 
   odoo:
-    image: ghcr.io/iwangub/odoo_lab:latest
+    image: ghcr.io/iwangub/odoo-lab:latest
     build:
       context: .
       dockerfile: docker/Dockerfile

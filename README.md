@@ -1,4 +1,4 @@
-# odoo_lab
+# odoo-lab
 
 Odoo 18 DevOps portfolio project — custom module development, Docker packaging, and CI with GitHub Actions.
 
@@ -15,7 +15,7 @@ Odoo 18 DevOps portfolio project — custom module development, Docker packaging
 
 Lightweight time tracking for projects and technologies.
 
-- Log time entries per project (odoo_lab, weather-app, ...)
+- Log time entries per project (odoo-lab, weather-app, ...)
 - Link entries to technologies (Python, Docker, Django, ...)
 - Computed total time per project
 - Start / Stop / Continue timer actions
