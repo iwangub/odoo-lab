@@ -1,4 +1,4 @@
-name: Deploy Staging
+name: Deploy Prod
 
 on:
   workflow_dispatch:
@@ -25,7 +25,9 @@ jobs:
           context: .
           file: docker/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}:staging
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:sha-${{ github.sha }}
 
   deploy:
     needs: build-push
@@ -36,25 +38,22 @@ jobs:
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > /tmp/private_key
           chmod 600 /tmp/private_key
 
-      # TODO: Harden deployment user – replace docker group membership with sudoers whitelist
-      # 'docker run -v /:/host -it alpine chroot /host' will make anyone root
-      # See: /etc/sudoers.d/deploy → allow only 'docker compose pull' and 'docker compose up'
       - name: Deploy via SSH
         run: |
           ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
             deploy@${{ secrets.STAGING_HOST }} \
-            'cd /opt/odoo && docker compose pull odoo_staging && docker compose up -d --no-deps odoo_staging'
+            'cd /opt/odoo && docker compose pull odoo && docker compose up -d --no-deps odoo'
 
       - name: Update Worklog module
         run: |
           ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
             deploy@${{ secrets.STAGING_HOST }} \
-            'cd /opt/odoo && docker compose run --rm odoo_staging odoo -u worklog --stop-after-init --no-http'
+            'cd /opt/odoo && docker compose run --rm odoo odoo -u worklog --stop-after-init --no-http'
 
       - name: Health check
         run: |
           sleep 40
-          curl -f https://staging-odoo.dev-lab.dev/web/health || exit 1
+          curl -f https://odoo.dev-lab.dev/web/health || exit 1
 
       - name: Cleanup
         if: always()
