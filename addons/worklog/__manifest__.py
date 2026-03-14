@@ -1,11 +1,11 @@
 {
     "name": "Worklog",
-    "version": "18.0.0.2.0",
+    "version": "18.0.0.3.0",
     "summary": "Track time spent on projects and technologies",
     "description": """
-Track time spent on personal and professional projects.
-Log entries per project and tag them by technology (Python, Docker, CI/CD, ...).
-    """,
+                   Track time spent on personal and professional projects.
+                   Log entries per task and tag them by technology (Python, Docker, CI/CD, ...).
+                       """,
     "author": "Iwan Gubler",
     "license": "LGPL-3",
     "website": "https://github.com/iwangub/odoo-lab",
@@ -21,6 +21,7 @@ Log entries per project and tag them by technology (Python, Docker, CI/CD, ...).
         "views/worklog_project_views.xml",
         "views/worklog_time_entry_views.xml",
         "views/worklog_technology_views.xml",
+        "views/worklog_project_task_views.xml",
         "views/worklog_menus.xml",
     ],
     "installable": True,

@@ -5,21 +5,34 @@
         <field name="name">worklog.project.kanban</field>
         <field name="model">worklog.project</field>
         <field name="arch" type="xml">
-            <kanban string="Projects">
-                <field name="name"/>
-                <field name="total_time_hours"/>
-                <field name="description"/>
+            <kanban string="Projects" default_group_by="state">
+                <!--                <field name="name"/>-->
+                <!--                <field name="total_time_hours"/>-->
+                <!--                <field name="description"/>-->
+                <field name="state"/>
                 <templates>
                     <t t-name="card">
                         <div class="oe_kanban_card">
                             <strong>
                                 <field name="name"/>
                             </strong>
-                            <div class="text-muted">
-                                <field name="description"/>
-                            </div>
-                            <div class="mt-2">
-                                <span>Total time</span><field name="total_time_hours" widget="float_time"/>
+                            <div invisible="state in ['1_draft']">
+                                <div class="mt-2 text-muted small">
+                                    <span>Today: <field name="today_hours" widget="float_time" class="d-inline"/>
+                                        h</span>
+                                </div>
+                                <div class="mt-2 text-muted small">
+                                    <span>Last 7 Days: <field name="last_7_days_hours" widget="float_time"
+                                                              class="d-inline"/> h</span>
+                                </div>
+                                <div class="mt-2 text-muted small">
+                                    <span>Last 30 Days: <field name="last_30_days_hours" widget="float_time"
+                                                               class="d-inline"/> h</span>
+                                </div>
+                                <div class="mt-2 text-muted small">
+                                    <span>Total: <field name="total_time_hours" widget="float_time" class="d-inline"/>
+                                        h</span>
+                                </div>
                             </div>
                         </div>
                     </t>
@@ -35,6 +48,9 @@
             <list string="Projects">
                 <field name="name"/>
                 <field name="total_time_hours" widget="float_time" string="Total Time"/>
+                <field name="today_hours" widget="float_time"/>
+                <field name="last_7_days_hours" widget="float_time"/>
+                <field name="last_30_days_hours" widget="float_time"/>
             </list>
         </field>
     </record>
@@ -45,10 +61,20 @@
         <field name="arch" type="xml">
             <form string="Project">
                 <sheet>
-                    <div class="oe_button_box" name="button_box"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_tasks"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-tasks">
+                            <field name="task_count" string="Tasks" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Project name"/></h1>
+                    </div>
                     <group>
                         <group>
-                            <field name="name"/>
+                            <field name="state"/>
                             <field name="total_time_hours" widget="float_time"
                                    string="Total Time" readonly="1"/>
                         </group>
@@ -57,21 +83,31 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Time Entries">
-                            <field name="entry_ids">
+                        <page string="Tasks">
+                            <field name="task_ids" domain="[('state', 'in', ['1_draft','2_backlog', '3_do'])]">
+                                <!-- TODO: domain or invisible doesnt work-->
                                 <list>
+                                    <field name="sequence" widget="handle"/>
                                     <field name="name"/>
-                                    <field name="start_time"/>
-                                    <field name="end_time"/>
-                                    <field name="technology_ids" widget="many2many_tags"/>
-                                    <field name="duration_hours" widget="float_time"
-                                           string="Duration" invisible="is_running"/>
-                                    <field name="live_duration_hours" widget="float_time"
-                                           string="Live" invisible="not is_running"/>
-                                    <field name="is_running" readonly="1"/>
+                                    <field name="state"/>
                                 </list>
                             </field>
                         </page>
+                        <!--                        <page string="Time Entries">-->
+                        <!--                            <field name="entry_ids">-->
+                        <!--                                <list>-->
+                        <!--                                    <field name="name"/>-->
+                        <!--                                    <field name="start_time"/>-->
+                        <!--                                    <field name="end_time"/>-->
+                        <!--                                    <field name="technology_ids" widget="many2many_tags"/>-->
+                        <!--                                    <field name="duration_hours" widget="float_time"-->
+                        <!--                                           string="Duration" invisible="is_running"/>-->
+                        <!--                                    <field name="live_duration_hours" widget="float_time"-->
+                        <!--                                           string="Live" invisible="not is_running"/>-->
+                        <!--                                    <field name="is_running" readonly="1"/>-->
+                        <!--                                </list>-->
+                        <!--                            </field>-->
+                        <!--                        </page>-->
                     </notebook>
                 </sheet>
             </form>
@@ -84,6 +120,8 @@
         <field name="arch" type="xml">
             <search string="Search Projects">
                 <field name="name"/>
+                <field name="description"/>
+                <field name="state"/>
             </search>
         </field>
     </record>

@@ -8,7 +8,7 @@
                   decoration-success="is_running">
                 <field name="name"/>
                 <field name="project_id"/>
-                <field name="technology_ids" widget="many2many_tags"/>
+                <field name="task_id"/>
                 <field name="user_id" groups="base.group_system" optional="hide"/>
                 <field name="start_time"/>
                 <field name="end_time"/>
@@ -48,13 +48,11 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <!-- TODO: add today_count, week_count, month_count -->
                     </div>
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="project_id"/>
-                            <field name="technology_ids" widget="many2many_tags"/>
+                            <field name="task_id"/>
                             <field name="user_id" groups="base.group_system"/>
                             <field name="is_running" readonly="1"/>
                         </group>
@@ -83,21 +81,17 @@
             <search string="Search Worklog">
                 <field name="name"/>
                 <field name="project_id"/>
-                <field name="technology_ids"/>
                 <field name="user_id"/>
                 <filter name="my_entries" string="My Entries" domain="[('user_id', '=', uid)]"/>
                 <filter name="running" string="Running" domain="[('is_running', '=', True)]"/>
                 <separator/>
-                <!-- TODO: Add filters week/month -->
                 <filter name="today" string="Today"
                         domain="[
         ('start_time', '&gt;=', context_today()),
         ('start_time', '&lt;', context_today() + relativedelta(days=1))
     ]"
                 />
-                <!-- TODO: Add Group By -->
             </search>
         </field>
     </record>
-
 </odoo>

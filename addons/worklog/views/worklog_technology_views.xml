@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- TODO: add kanban   -->
-
     <record id="view_worklog_technology_list" model="ir.ui.view">
         <field name="name">worklog.technology.list</field>
         <field name="model">worklog.technology</field>
         <field name="arch" type="xml">
             <list string="technologies">
-                <field name="name" />
-                <field name="invested_time_total_hours" widget="float_time" readonly="1" />
+                <field name="name"/>
+                <field name="today_hours" widget="float_time" readonly="1"/>
+                <field name="last_7_days_hours" widget="float_time" readonly="1"/>
+                <field name="last_30_days_hours" widget="float_time" readonly="1"/>
+                <field name="total_time_hours" widget="float_time" readonly="1"/>
             </list>
         </field>
     </record>
@@ -20,8 +21,11 @@
             <form string="technology">
                 <sheet>
                     <group>
-                        <field name="name" />
-                        <field name="invested_time_total_hours" widget="float_time" readonly="1" />
+                        <field name="name"/>
+                        <field name="today_hours" widget="float_time" readonly="1"/>
+                        <field name="last_7_days_hours" widget="float_time" readonly="1"/>
+                        <field name="last_30_days_hours" widget="float_time" readonly="1"/>
+                        <field name="total_time_hours" widget="float_time" readonly="1"/>
                     </group>
                 </sheet>
             </form>

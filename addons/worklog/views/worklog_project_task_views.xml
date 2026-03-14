@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_worklog_project_task_kanban" model="ir.ui.view">
+        <field name="name">worklog.project.task.kanban</field>
+        <field name="model">worklog.project.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <!--                <field name="name"/>-->
+                <field name="state"/>
+                <!--                <field name="project_id"/>-->
+                <templates>
+                    <t t-name="card">
+                        <strong>
+                            <field name="name"/>
+                        </strong>
+                        <!--                        <div class="mt-1 text-muted small">-->
+                        <!--                            <span>Project: <field name="project_id"/></span>-->
+                        <!--                        </div>-->
+                        <div invisible="state in ['1_draft']">
+                            <div class="mt-2 text-muted small">
+                                <span>Today: <field name="today_hours" widget="float_time" class="d-inline"/> h</span>
+                            </div>
+                            <div class="mt-2 text-muted small">
+                                <span>Last 7 Days: <field name="last_7_days_hours" widget="float_time"
+                                                          class="d-inline"/> h</span>
+                            </div>
+                            <div class="mt-2 text-muted small">
+                                <span>Last 30 Days: <field name="last_30_days_hours" widget="float_time"
+                                                           class="d-inline"/> h</span>
+                            </div>
+                            <div class="mt-2 text-muted small">
+                                <span>Total: <field name="total_time_hours" widget="float_time" class="d-inline"/>
+                                    h</span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_worklog_project_task_form" model="ir.ui.view">
+        <field name="name">worklog.project.task.form</field>
+        <field name="model">worklog.project.task</field>
+        <field name="arch" type="xml">
+            <form string="Task">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="state"/>
+                            <field name="project_id"/>
+                        </group>
+                        <group>
+                            <field name="notes"/>
+                            <field name="technology_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Time Entries">
+                            <field name="time_entry_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="start_time"/>
+                                    <field name="end_time"/>
+                                    <!--                                    <field name="technology_ids" widget="many2many_tags"/>-->
+                                    <field name="duration_hours" widget="float_time"
+                                           string="Duration" invisible="is_running"/>
+                                    <field name="live_duration_hours" widget="float_time"
+                                           string="Live" invisible="not is_running"/>
+                                    <field name="is_running" readonly="1"/>
+                                </list>
+
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_worklog_project_task_list" model="ir.ui.view">
+        <field name="name">worklog.project.task.list</field>
+        <field name="model">worklog.project.task</field>
+        <field name="arch" type="xml">
+            <list string="Tasks">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_worklog_project_task_search" model="ir.ui.view">
+        <field name="name">worklog.project.task.search</field>
+        <field name="model">worklog.project.task</field>
+        <field name="arch" type="xml">
+            <search string="Search Tasks">
+                <field name="name"/>
+                <field name="project_id" filter_domain="[('project_id', '=', self)]"/>
+                <group expand="1" string="Group By">
+                    <filter name="group_by_project" string="Project" context="{'group_by': 'project_id'}"/>
+                    <filter name="group_by_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

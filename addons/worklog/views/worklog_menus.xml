@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <record id="action_worklog_technology" model="ir.actions.act_window">
+    <record id="action_worklog_technology" model="ir.actions.act_window">
         <field name="name">Technologies</field>
         <field name="res_model">worklog.technology</field>
         <field name="view_mode">list,form</field>
-<!--        <field name="search_view_id" ref="view_worklog_project_search"/>-->
+        <!--        <field name="search_view_id" ref="view_worklog_project_search"/>-->
     </record>
 
     <record id="action_worklog_projects" model="ir.actions.act_window">
@@ -12,6 +12,14 @@
         <field name="res_model">worklog.project</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="view_worklog_project_search"/>
+    </record>
+
+    <record id="action_worklog_project_tasks" model="ir.actions.act_window">
+        <field name="name">Tasks</field>
+        <field name="res_model">worklog.project.task</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_worklog_project_task_search"/>
+        <field name="context">{'search_default_group_by_project': 1}</field>
     </record>
 
     <record id="action_worklog_time_entries" model="ir.actions.act_window">
@@ -34,11 +42,18 @@
               sequence="10"
               groups="base.group_user"/>
 
+    <menuitem id="menu_worklog_project_tasks"
+              name="Tasks"
+              parent="menu_worklog_root"
+              action="action_worklog_project_tasks"
+              sequence="20"
+              groups="base.group_user"/>
+
     <menuitem id="menu_worklog_time_entries"
               name="Time Entries"
               parent="menu_worklog_root"
               action="action_worklog_time_entries"
-              sequence="20"
+              sequence="30"
               groups="base.group_user"/>
 
     <menuitem id="menu_worklog_technologies"

@@ -2,22 +2,46 @@ from odoo import api, fields, models
 from datetime import datetime, timedelta
 
 
-class WorklogProject(models.Model):
-    _name = "worklog.project"
-    _description = "Worklog Project"
-    _order = "name"
+class WorklogProjectTask(models.Model):
+    _name = "worklog.project.task"
+    _description = "Worklog Project Task"
+    _order = "state"
     _inherit = ['worklog.time.stats.mixin']
 
     name = fields.Char(
+        string="Task",
+        required=True,
+    )
+
+    sequence = fields.Integer(
+        default=10,
+    )
+
+    project_id = fields.Many2one(
+        comodel_name="worklog.project",
         string="Project",
         required=True,
+        ondelete="cascade",
+    )
+
+    time_entry_ids = fields.One2many(
+        string="Time Entries",
+        comodel_name="worklog.time.entry",
+        inverse_name="task_id"
+    )
+
+    technology_ids = fields.Many2many(
+        comodel_name="worklog.technology",
+        string="Technologies",
     )
 
     state = fields.Selection([
         ('1_draft', 'Draft'),
         ('2_backlog', 'Backlog'),
         ('3_do', 'Do'),
-        ('4_done', 'Done'),
+        ('4_staging', 'Staging'),
+        ('5_prod', 'Prod'),
+        ('6_done', 'Done'),
     ],
         string='Status',
         default="1_draft",
@@ -25,23 +49,12 @@ class WorklogProject(models.Model):
         group_expand='_expand_states',
     )
 
-    description = fields.Text(
-        string="Description",
-    )
-
-    task_count = fields.Integer(
-        string="Tasks",
-        compute="_compute_task_count",
-    )
-
-    task_ids = fields.One2many(
-        comodel_name="worklog.project.task",
-        inverse_name="project_id",
-        string="Task Entries",
+    notes = fields.Char(
+        string="Notes"
     )
 
     ### w/o MIXIN STARTSECTION
-
+    #
     # today_hours = fields.Float(
     #     string="Today (Hours)",
     #     compute="_compute_today_hours",
@@ -70,10 +83,10 @@ class WorklogProject(models.Model):
     #     digits=(16, 2),
     # )
     #
-    # def _compute_today_hours(self): # same
+    # def _compute_today_hours(self):
     #     night = datetime.today().replace(hour=3, minute=0, second=0, microsecond=0)
     #     for record in self:
-    #         record.today_hours = sum(record.task_ids.time_entry_ids
+    #         record.today_hours = sum(record.time_entry_ids
     #                                  .filtered(lambda f: f.end_time > night)
     #                                  .mapped('duration_hours'))
     #
@@ -89,41 +102,58 @@ class WorklogProject(models.Model):
     #         res = record._compute_days_back_hours(30)
     #         record.last_30_days_hours = res
     #
+    #
     # def _compute_days_back_hours(self, days):
     #     self.ensure_one()
     #     amount_days_back = datetime.today() - timedelta(days=days)
     #     time_entries = sum(
-    #         self.task_ids.time_entry_ids
+    #         self.time_entry_ids
     #         .filtered(lambda f: f.end_time > amount_days_back)
     #         .mapped('duration_hours'))
     #     return time_entries
     #
-    # @api.depends("task_ids.time_entry_ids.duration_hours")
+    #
+    # @api.depends('time_entry_ids')
     # def _compute_total_time_hours(self):
     #     for record in self:
-    #         record.total_time_hours = sum(
-    #             record.task_ids.time_entry_ids.mapped("duration_hours")
-    #         )
+    #         total_hours = sum(record.time_entry_ids.mapped('duration_hours'))
+    #         record.total_time_hours = total_hours if total_hours else 0.0
 
     ### w/o MIXIN ENDSECTION
 
     ### with MIXIN STARTSECTION
 
-    @api.depends("task_ids.time_entry_ids.duration_hours")
+    @api.depends("time_entry_ids.duration_hours")
     def _compute_today_hours(self):
-        return super()._compute_today_hours()
+        night = datetime.today().replace(hour=3, minute=0, second=0, microsecond=0)
+        for record in self:
+            record.today_hours = sum(record.time_entry_ids
+                                     .filtered(lambda f: f.end_time > night)
+                                     .mapped('duration_hours'))
 
-    @api.depends("task_ids.time_entry_ids.duration_hours")
+    @api.depends("time_entry_ids.duration_hours")
     def _compute_last_7_days(self):
         return super()._compute_last_7_days()
 
-    @api.depends("task_ids.time_entry_ids.duration_hours")
+    @api.depends("time_entry_ids.duration_hours")
     def _compute_last_30_days(self):
         super()._compute_last_30_days()
 
-    @api.depends("task_ids.time_entry_ids.duration_hours")
+    def _compute_days_back_hours(self, days):
+        self.ensure_one()
+        amount_days_back = datetime.today() - timedelta(days=days)
+        time_entries = sum(
+            self.time_entry_ids
+            .filtered(lambda f: f.end_time > amount_days_back)
+            .mapped('duration_hours'))
+        return time_entries
+
+    @api.depends("time_entry_ids.duration_hours")
     def _compute_total_time_hours(self):
-        return super()._compute_total_time_hours()
+        for record in self:
+            record.total_time_hours = sum(
+                record.time_entry_ids.mapped("duration_hours")
+            )
 
     ### with MIXIN ENDSECTION
 
@@ -133,18 +163,21 @@ class WorklogProject(models.Model):
         for key, _ in self._fields['state'].selection:
             all_states.append(key)
         return all_states
+    # return [key for key, _ in self._fields['state'].selection]
 
-    def action_open_tasks(self):
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Tasks',
-            'res_model': 'worklog.project.task',
-            'view_mode': 'kanban,list,form',
-            'domain': [('project_id', '=', self.id)],
-            'context': {'default_project_id': self.id},
-        }
+    # state_order = fields.Integer(
+    #     compute="_compute_state_order",
+    #     store=True,
+    # )
 
-    @api.depends("task_ids")
-    def _compute_task_count(self):
-        for record in self:
-            record.task_count = len(record.task_ids)
+    # @api.depends("state")
+    # def _compute_state_order(self):
+    #     for record in self:
+    #         states = {
+    #             "backlog": 1,
+    #             "do": 2,
+    #             "staging": 3,
+    #             "prod": 4,
+    #             "done": 5,
+    #         }
+    #         record.state_order = states[record.state]

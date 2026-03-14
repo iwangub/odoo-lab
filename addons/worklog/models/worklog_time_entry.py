@@ -1,6 +1,8 @@
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
+from odoo.addons.account.tools import format_structured_reference_iso
+
 
 class WorklogTimeEntry(models.Model):
     _name = "worklog.time.entry"
@@ -23,11 +25,16 @@ class WorklogTimeEntry(models.Model):
         comodel_name="worklog.project",
         string="Project",
         required=True,
+        compute="_compute_project_id",
+        ondelete='cascade',
+        # store=True,
     )
 
-    technology_ids = fields.Many2many(
-        comodel_name="worklog.technology",
-        string="Technologies",
+    task_id = fields.Many2one(
+        string="Task",
+        comodel_name="worklog.project.task",
+        required=True,
+        ondelete="cascade"
     )
 
     start_time = fields.Datetime(
@@ -57,6 +64,12 @@ class WorklogTimeEntry(models.Model):
         string="Running",
         default=False,
     )
+
+    @api.depends('task_id')
+    def _compute_project_id(self):
+        for record in self:
+            record.project_id = record.task_id.project_id
+        # TODO: optimize non stored
 
     @api.depends("start_time", "end_time")
     def _compute_duration(self):
@@ -93,27 +106,6 @@ class WorklogTimeEntry(models.Model):
             ])
             if running_count:
                 raise ValidationError("Only one running timer per user is allowed.")
-
-    @api.constrains("user_id", "start_time", "end_time", "is_running")
-    def _check_no_overlap(self):
-        now = fields.Datetime.now()
-        for record in self:
-            if not record.user_id or not record.start_time:
-                continue
-
-            record_end = record.end_time or now
-            # TODO: optimize
-            overlaps = self.search([
-                ("id", "!=", record.id),
-                ("user_id", "=", record.user_id.id),
-                ("start_time", "!=", False),
-            ])
-            for other in overlaps:
-                other_end = other.end_time or now
-                if other.start_time < record_end and record.start_time < other_end:
-                    raise ValidationError(
-                        "Time entries for the same user cannot overlap."
-                    )
 
     @api.constrains("is_running", "end_time")
     def _check_running_end_time_consistency(self):
@@ -161,6 +153,7 @@ class WorklogTimeEntry(models.Model):
             "name": self.name,
             "user_id": self.env.user.id,
             "project_id": self.project_id.id,
+            "task_id": self.task_id.id,
             "start_time": fields.Datetime.now(),
             "is_running": True,
         })

@@ -10,9 +10,10 @@ class TestWorklogTimeEntry(TransactionCase):
     def setUp(self):
         super().setUp()
         self.project = self.env["worklog.project"].create({"name": "Test Project"})
+        self.task = self.env["worklog.project.task"].create({"name": "Test Task"})
         self.entry = self.env["worklog.time.entry"].create({
             "name": "Test Entry",
-            "project_id": self.project.id,
+            "task_id": self.task.id,
         })
 
     def test_action_start(self):
@@ -38,7 +39,7 @@ class TestWorklogTimeEntry(TransactionCase):
         self.entry.action_start()
         second = self.env["worklog.time.entry"].create({
             "name": "Second Entry",
-            "project_id": self.project.id,
+            "task_id": self.task.id,
         })
         with self.assertRaises(ValidationError):
             second.write({"is_running": True})

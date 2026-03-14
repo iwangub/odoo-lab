@@ -37,5 +37,17 @@
         <record id="worklog.worklog_technology_javascript" model="worklog.technology">
             <field name="name">JavaScript</field>
         </record>
+        <record id="worklog.worklog_technology_react" model="worklog.technology">
+            <field name="name">React</field>
+        </record>
+        <record id="worklog.worklog_technology_ansible" model="worklog.technology">
+            <field name="name">Ansible</field>
+        </record>
+        <record id="worklog.worklog_technology_terraform" model="worklog.technology">
+            <field name="name">Terraform</field>
+        </record>
+        <record id="worklog.worklog_technology_openshift" model="worklog.technology">
+            <field name="name">Openshift</field>
+        </record>
     </data>
 </odoo>
