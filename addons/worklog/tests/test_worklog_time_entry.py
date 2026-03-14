@@ -10,7 +10,7 @@ class TestWorklogTimeEntry(TransactionCase):
     def setUp(self):
         super().setUp()
         self.project = self.env["worklog.project"].create({"name": "Test Project"})
-        self.task = self.env["worklog.project.task"].create({"name": "Test Task"})
+        self.task = self.env["worklog.project.task"].create({"name": "Test Task", "project_id": self.project.id})
         self.entry = self.env["worklog.time.entry"].create({
             "name": "Test Entry",
             "task_id": self.task.id,
