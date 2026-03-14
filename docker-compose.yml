@@ -16,6 +16,23 @@ services:
     networks:
       - odoo-net
 
+  db_staging:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: ${POSTGRES_USER:-odoo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data_staging:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-odoo}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - odoo-net
+
   nginx:
     image: nginx:alpine
     ports:
@@ -27,6 +44,8 @@ services:
     depends_on:
       odoo:
         condition: service_healthy
+#      odoo_staging:
+#        condition: service_healthy
     restart: unless-stopped
     networks:
       - odoo-net
@@ -61,9 +80,33 @@ services:
     networks:
       - odoo-net
 
+  odoo_staging:
+    image: ghcr.io/iwangub/odoo-lab:staging
+    volumes:
+      - odoo_data_staging:/var/lib/odoo
+    environment:
+      HOST: db_staging
+      USER: ${POSTGRES_USER:-odoo}
+      PASSWORD: ${POSTGRES_PASSWORD}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    depends_on:
+      db_staging:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sf http://localhost:8069/web/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    restart: unless-stopped
+    networks:
+      - odoo-net
+
 volumes:
   db_data:
+  db_data_staging:
   odoo_data:
+  odoo_data_staging:
 
 networks:
   odoo-net:
