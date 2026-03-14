@@ -1,8 +1,6 @@
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
-from odoo.addons.account.tools import format_structured_reference_iso
-
 
 class WorklogTimeEntry(models.Model):
     _name = "worklog.time.entry"

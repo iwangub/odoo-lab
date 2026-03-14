@@ -1,5 +1,4 @@
 from odoo import api, fields, models
-from datetime import datetime, timedelta
 
 
 class WorklogProject(models.Model):
