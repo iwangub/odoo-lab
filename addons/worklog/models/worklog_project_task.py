@@ -128,7 +128,7 @@ class WorklogProjectTask(models.Model):
         night = datetime.today().replace(hour=3, minute=0, second=0, microsecond=0)
         for record in self:
             record.today_hours = sum(record.time_entry_ids
-                                     .filtered(lambda f: f.end_time > night)
+                                     .filtered(lambda f: f.end_time and f.end_time > night)
                                      .mapped('duration_hours'))
 
     @api.depends("time_entry_ids.duration_hours")
@@ -144,7 +144,7 @@ class WorklogProjectTask(models.Model):
         amount_days_back = datetime.today() - timedelta(days=days)
         time_entries = sum(
             self.time_entry_ids
-            .filtered(lambda f: f.end_time > amount_days_back)
+            .filtered(lambda f: f.end_time and f.end_time > amount_days_back)
             .mapped('duration_hours'))
         return time_entries
 
