@@ -6,9 +6,6 @@
         <field name="model">worklog.project</field>
         <field name="arch" type="xml">
             <kanban string="Projects" default_group_by="state">
-                <!--                <field name="name"/>-->
-                <!--                <field name="total_time_hours"/>-->
-                <!--                <field name="description"/>-->
                 <field name="state"/>
                 <templates>
                     <t t-name="card">
@@ -75,40 +72,17 @@
                     <group>
                         <group>
                             <field name="state"/>
-                            <field name="total_time_hours" widget="float_time"
-                                   string="Total Time" readonly="1"/>
                         </group>
                         <group>
-                            <field name="description"/>
+                            <field name="today_hours" widget="float_time" readonly="1"/>
+                            <field name="last_7_days_hours" widget="float_time" readonly="1"/>
+                            <field name="last_30_days_hours" widget="float_time" readonly="1"/>
+                            <field name="total_time_hours" widget="float_time" readonly="1"/>
                         </group>
                     </group>
-                    <notebook>
-                        <page string="Tasks">
-                            <field name="task_ids" domain="[('state', 'in', ['1_draft','2_backlog', '3_do'])]">
-                                <!-- TODO: domain or invisible doesnt work-->
-                                <list>
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="name"/>
-                                    <field name="state"/>
-                                </list>
-                            </field>
-                        </page>
-                        <!--                        <page string="Time Entries">-->
-                        <!--                            <field name="entry_ids">-->
-                        <!--                                <list>-->
-                        <!--                                    <field name="name"/>-->
-                        <!--                                    <field name="start_time"/>-->
-                        <!--                                    <field name="end_time"/>-->
-                        <!--                                    <field name="technology_ids" widget="many2many_tags"/>-->
-                        <!--                                    <field name="duration_hours" widget="float_time"-->
-                        <!--                                           string="Duration" invisible="is_running"/>-->
-                        <!--                                    <field name="live_duration_hours" widget="float_time"-->
-                        <!--                                           string="Live" invisible="not is_running"/>-->
-                        <!--                                    <field name="is_running" readonly="1"/>-->
-                        <!--                                </list>-->
-                        <!--                            </field>-->
-                        <!--                        </page>-->
-                    </notebook>
+                    <group>
+                        <field name="description" nolabel="1"/>
+                    </group>
                 </sheet>
             </form>
         </field>

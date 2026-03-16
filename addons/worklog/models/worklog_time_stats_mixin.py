@@ -6,13 +6,6 @@ class WorklogTimeStatsMixin(models.AbstractModel):
     _name = "worklog.time.stats.mixin"
     _description = "Worklog Time Stats Mixin"
 
-
-    # task_ids = fields.One2many(
-    #     comodel_name="worklog.project.task",
-    #     inverse_name="project_id",
-    #     string="Task Entries",
-    # )
-
     today_hours = fields.Float(
         string="Today (Hours)",
         compute="_compute_today_hours",
@@ -41,7 +34,6 @@ class WorklogTimeStatsMixin(models.AbstractModel):
         digits=(16, 2),
     )
 
-    #@api.depends("task_ids.time_entry_ids.duration_hours")
     def _compute_today_hours(self):
         night = datetime.today().replace(hour=3, minute=0, second=0, microsecond=0)
         for record in self:
@@ -49,13 +41,11 @@ class WorklogTimeStatsMixin(models.AbstractModel):
                                      .filtered(lambda f: f.end_time and f.end_time > night)
                                      .mapped('duration_hours'))
 
-    #    @api.depends("task_ids.time_entry_ids.duration_hours")
     def _compute_last_7_days(self):
         for record in self:
             res = record._compute_days_back_hours(7)
             record.last_7_days_hours = res
 
-    #    @api.depends("task_ids.time_entry_ids.duration_hours")
     def _compute_last_30_days(self):
         for record in self:
             res = record._compute_days_back_hours(30)
@@ -70,7 +60,6 @@ class WorklogTimeStatsMixin(models.AbstractModel):
             .mapped('duration_hours'))
         return time_entries
 
-    # @api.depends("task_ids.time_entry_ids.duration_hours")
     def _compute_total_time_hours(self):
         for record in self:
             record.total_time_hours = sum(

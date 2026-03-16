@@ -63,6 +63,11 @@ class WorklogTimeEntry(models.Model):
         default=False,
     )
 
+    technology_ids = fields.Many2many(
+        related='task_id.technology_ids',
+        string="Technologies",
+    )
+
     @api.depends('task_id')
     def _compute_project_id(self):
         for record in self:

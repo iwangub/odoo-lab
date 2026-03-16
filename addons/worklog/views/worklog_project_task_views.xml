@@ -6,17 +6,12 @@
         <field name="model">worklog.project.task</field>
         <field name="arch" type="xml">
             <kanban default_group_by="state">
-                <!--                <field name="name"/>-->
                 <field name="state"/>
-                <!--                <field name="project_id"/>-->
                 <templates>
                     <t t-name="card">
                         <strong>
                             <field name="name"/>
                         </strong>
-                        <!--                        <div class="mt-1 text-muted small">-->
-                        <!--                            <span>Project: <field name="project_id"/></span>-->
-                        <!--                        </div>-->
                         <div invisible="state in ['1_draft']">
                             <div class="mt-2 text-muted small">
                                 <span>Today: <field name="today_hours" widget="float_time" class="d-inline"/> h</span>
@@ -29,10 +24,13 @@
                                 <span>Last 30 Days: <field name="last_30_days_hours" widget="float_time"
                                                            class="d-inline"/> h</span>
                             </div>
-                            <div class="mt-2 text-muted small">
+                            <div class="mt-2 small">
                                 <span>Total: <field name="total_time_hours" widget="float_time" class="d-inline"/>
                                     h</span>
                             </div>
+                        </div>
+                        <div class="mt-2 small">
+                            <span>Tech: </span><field name="technology_ids" widget="many2many_tags"/>
                         </div>
                     </t>
                 </templates>

@@ -7,6 +7,7 @@
             <list string="Worklog" default_order="start_time desc"
                   decoration-success="is_running">
                 <field name="name"/>
+                <field name="technology_ids" widget="many2many_tags"/>
                 <field name="project_id"/>
                 <field name="task_id"/>
                 <field name="user_id" groups="base.group_system" optional="hide"/>
@@ -67,6 +68,7 @@
                                    string="Duration" invisible="is_running"/>
                             <field name="live_duration_hours" widget="float_time" readonly="1"
                                    string="Live Duration" invisible="not is_running"/>
+                            <field name="technology_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                 </sheet>
