@@ -14,6 +14,7 @@
         "web",
     ],
     "data": [
+        "data/cron.xml",
         "data/data.xml",
         "data/technology_data.xml",
         "security/worklog_security.xml",
