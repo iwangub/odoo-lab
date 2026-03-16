@@ -1,26 +1,33 @@
 # odoo-lab
 
-Odoo 18 DevOps portfolio project — custom module development, Docker packaging, and CI with GitHub Actions.
+Python Backend and DevOps portfolio — custom module development, Docker packaging, and CI/CD with GitHub Actions.
 
 ## Stack
 
-| Layer      | Technology              |
-|------------|-------------------------|
-| App        | Odoo 18.0               |
-| Database   | PostgreSQL 14           |
-| Container  | Docker + Compose        |
-| CI         | GitHub Actions          |
+| Layer         | Technology              |
+|---------------|-------------------------|
+| App           | Odoo 18.0               |
+| Database      | PostgreSQL 14           |
+| Container     | Docker + Compose        |
+| Reverse Proxy | nginx                   |
+| CI/CD         | GitHub Actions          |
+
+## Bundled add-ons
+
+The image includes a second add-on pulled at build time via a multi-stage Docker build:
+
+- **[web_dark_mode](https://github.com/OCA/web/tree/18.0/web_dark_mode)** (OCA) — optional dark theme; install it from the Apps menu if you want it.
 
 ## Module: Worklog
 
-Lightweight time tracking for projects and technologies.
+Lightweight time tracking for side projects, create tasks, and check used technologies.
 
-- Log time entries per project (odoo-lab, weather-app, ...)
-- Link entries to technologies (Python, Docker, Django, ...)
-- Computed total time per project
-- Start / Stop / Continue timer actions
-- One running timer per user enforced
-- Module baked into the image at build time
+- Manage projects with a Kanban board (Draft → Backlog → Do → Done)
+- Break projects down into tasks with their own Kanban pipeline (Draft → Backlog → Do → Staging → Prod → Done)
+- Log time entries per task
+- Tag tasks with technologies (Python, Docker, ...)
+- Time stats on projects, tasks, and technologies: today, last 7 days, last 30 days, total
+- Start / Stop / Continue timer actions on time entries
 
 ## Prerequisites
 
@@ -31,7 +38,7 @@ Lightweight time tracking for projects and technologies.
 
 ```bash
 cp .env.example .env
-# edit .env and set POSTGRES_PASSWORD and ADMIN_PASSWORD
+# edit .env: set POSTGRES_PASSWORD
 
 make up
 ```
@@ -43,12 +50,12 @@ Open http://localhost:8069
 ```bash
 make up       # Start the stack
 make down     # Stop and remove containers
-make build    # Rebuild the Odoo image
-make restart  # Restart the Odoo service
+make build    # Rebuild the Odoo image (--no-cache)
+make restart  # Restart only the Odoo container
 make logs     # Follow Odoo logs
 make shell    # Shell inside the Odoo container
 make psql     # psql inside the database container
-make test     # Run Odoo module tests
+make test     # Run Odoo module tests (worklog)
 ```
 
 ## CI Pipeline

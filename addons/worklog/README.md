@@ -1,20 +1,24 @@
 # Worklog (Odoo 18)
 
-A lightweight module to track how much time you invest in your own side projects.
-
-## Why this module
-
-Most Odoo time trackers are heavy. This module keeps it simple:
-- Create an entry, hit Start/Stop, done.
-- See where your time goes across projects.
-- Keep data clean with overlap checks and one running timer per user.
+A lightweight module to track how much time you invest in your side projects.
 
 ## Features
 
-- One-click `Start`, `Stop`, and `Continue` actions.
-- Exactly one running timer per user.
-- Automatic overlap prevention for time entries.
-- Live duration while a timer is running.
+- **Projects** — Kanban board with four states: Draft, Backlog, Do, Done
+- **Tasks** — each project has tasks with a six-state pipeline: Draft → Backlog → Do → Staging → Prod → Done
+- **Time entries** — logged per task, with Start / Stop / Continue actions
+- **Technologies** — tag tasks with technologies (Python, Docker, ...); see time stats per technology
+- **Time stats** — today, last 7 days, last 30 days, and total hours on projects, tasks, and technologies
+
+## Models
+
+| Model | Description |
+|---|---|
+| `worklog.project` | Project with Kanban state |
+| `worklog.project.task` | Task belonging to a project; holds time entries and technology tags |
+| `worklog.time.entry` | Individual time entry with start/stop timer |
+| `worklog.technology` | Technology tag with aggregated time stats |
+| `worklog.time.stats.mixin` | Abstract mixin providing shared time stat fields |
 
 ## Installation
 
@@ -30,9 +34,9 @@ CLI example:
 
 ## Usage
 
-1. Open `Worklog -> Time Entries`.
-2. Create a time entry with description + project.
-3. Use `Start` and `Stop` in the form header.
+1. Open `Worklog → Projects` and create a project.
+2. Open the project and add tasks.
+3. From a task, create a time entry and hit `Start`.
 
 ## License
 
