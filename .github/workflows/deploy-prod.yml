@@ -41,13 +41,13 @@ jobs:
       - name: Deploy via SSH
         run: |
           ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
-            deploy@${{ secrets.STAGING_HOST }} \
+            deploy@${{ secrets.HOST }} \
             'cd /opt/odoo && docker compose pull odoo && docker compose up -d --no-deps --force-recreate odoo'
 
       - name: Update Worklog module
         run: |
           ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
-            deploy@${{ secrets.STAGING_HOST }} \
+            deploy@${{ secrets.HOST }} \
             'cd /opt/odoo && docker compose run --rm odoo odoo -u worklog --stop-after-init --no-http'
 
       - name: Health check

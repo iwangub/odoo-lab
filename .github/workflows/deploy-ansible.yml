@@ -1,0 +1,31 @@
+name: Deploy Ansible
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ansible:
+    name: Run Ansible Playbook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Prepare SSH Key
+        run: |
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+
+      - name: Run Ansible playbook
+        env:
+          HOST: ${{ secrets.HOST }}
+        run: |
+          ansible-playbook \
+            -i ansible/inventory.yml \
+            ansible/playbook.yml
+
+      - name: Cleanup
+        if: always()
+        run: rm -f /tmp/deploy_key

@@ -15,15 +15,15 @@ jobs:
           chmod 600 /tmp/private_key
           
           ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
-            deploy@${{ secrets.STAGING_HOST }} 'mkdir -p /opt/odoo/nginx'
+            deploy@${{ secrets.HOST }} 'mkdir -p /opt/odoo/nginx'
           
           scp -i /tmp/private_key -o StrictHostKeyChecking=no \
             docker-compose.yml \
-            deploy@${{ secrets.STAGING_HOST }}:/opt/odoo/
+            deploy@${{ secrets.HOST }}:/opt/odoo/
           
           scp -i /tmp/private_key -o StrictHostKeyChecking=no \
             nginx/nginx.conf \
-            deploy@${{ secrets.STAGING_HOST }}:/opt/odoo/nginx/
+            deploy@${{ secrets.HOST }}:/opt/odoo/nginx/
 
       - name: Cleanup
         if: always()

@@ -1,0 +1,26 @@
+---
+- name: Backup setup
+  hosts: server
+  become: true
+  tasks:
+    - name: Copy backup.sh
+      copy:
+        src: backup.sh
+        dest: /opt/odoo/scripts/backup.sh
+        owner: deploy
+        mode: "0750"
+
+    - name: Create logfile
+      file:
+        path: /var/log/odoo-backup.log
+        state: touch
+        owner: deploy
+        mode: "0644"
+
+    - name: Cronjob für nightly Backup
+      cron:
+        name: "odoo nightly backup"
+        minute: "0"
+        hour: "2"
+        job: "/opt/odoo/scripts/backup.sh >> /var/log/odoo-backup.log 2>&1"
+        user: deploy
