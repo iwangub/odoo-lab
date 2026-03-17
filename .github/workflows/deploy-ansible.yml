@@ -21,6 +21,7 @@ jobs:
       - name: Run Ansible playbook
         env:
           HOST: ${{ secrets.HOST }}
+          ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           ansible-playbook \
             -i ansible/inventory.yml \
