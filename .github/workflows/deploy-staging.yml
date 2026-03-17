@@ -43,7 +43,7 @@ jobs:
         run: |
           ssh -i /tmp/private_key -o StrictHostKeyChecking=no \
             deploy@${{ secrets.STAGING_HOST }} \
-            'cd /opt/odoo && docker compose pull odoo_staging && docker compose up -d --no-deps odoo_staging'
+            'cd /opt/odoo && docker compose pull odoo_staging && docker compose up -d --no-deps --force-recreate odoo_staging'
 
       - name: Update Worklog module
         run: |
