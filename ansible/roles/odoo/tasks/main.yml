@@ -6,7 +6,7 @@
     mode: "0755"
   loop:
     - /opt/odoo/scripts
-    - /opt/odoo/backup/logs
+    - /opt/odoo/backups/logs
 
 - name: Copy backup.sh
   copy:
@@ -15,9 +15,16 @@
     owner: deploy
     mode: "0750"
 
+- name: Copy db-replicate.sh
+  copy:
+    src: db-replicate.sh
+    dest: /opt/odoo/scripts/db-replicate.sh
+    owner: deploy
+    mode: "0750"
+
 - name: Create logfile
   file:
-    path: /opt/odoo/backup/logs/odoo-backup.log
+    path: /opt/odoo/backups/logs/odoo-backup.log
     state: touch
     owner: deploy
     mode: "0644"
@@ -27,5 +34,5 @@
     name: "odoo nightly backup"
     minute: "0"
     hour: "2"
-    job: "/opt/odoo/scripts/backup.sh >> /opt/odoo/backup/logs/odoo-backup.log 2>&1"
+    job: "/opt/odoo/scripts/backup.sh >> /opt/odoo/backups/logs/odoo-backup.log 2>&1"
     user: deploy
