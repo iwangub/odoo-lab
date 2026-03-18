@@ -1,36 +1,6 @@
 ---
-- name: Backup setup
+- name: Odoo server setup
   hosts: server
   become: false
-  tasks:
-    - name: Create directories
-      file:
-        path: "{{ item }}"
-        state: directory
-        owner: deploy
-        mode: "0755"
-      loop:
-        - /opt/odoo/scripts
-        - /opt/odoo/backup/logs
-
-    - name: Copy backup.sh
-      copy:
-        src: backup.sh
-        dest: /opt/odoo/scripts/backup.sh
-        owner: deploy
-        mode: "0750"
-
-    - name: Create logfile
-      file:
-        path: /opt/odoo/backup/logs/odoo-backup.log
-        state: touch
-        owner: deploy
-        mode: "0644"
-
-    - name: Cronjob für nightly Backup
-      cron:
-        name: "odoo nightly backup"
-        minute: "0"
-        hour: "2"
-        job: "/opt/odoo/scripts/backup.sh >> /opt/odoo/backup/logs/odoo-backup.log 2>&1"
-        user: deploy
+  roles:
+    - odoo
