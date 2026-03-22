@@ -1,9 +1,3 @@
-variable "hcloud_token" {
-  sensitive = true
-}
-
-variable "odoo_version" {}
-
 provider "hcloud" {
   token = var.hcloud_token
 }
