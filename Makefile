@@ -13,26 +13,26 @@ help:
 	@echo "  test     Run Odoo module tests"
 
 up:
-	docker compose up -d
+	docker compose -f docker-compose.dev.yml up -d
 
 down:
-	docker compose down
+	docker compose -f docker-compose.dev.yml down
 
 build:
-	docker compose build --no-cache
+	docker compose -f docker-compose.dev.yml build --no-cache
 
 restart:
-	docker compose restart odoo
+	docker compose -f docker-compose.dev.yml restart odoo_dev
 
 logs:
-	docker compose logs -f odoo
+	docker compose -f docker-compose.dev.yml logs -f odoo_dev
 
 shell:
-	docker compose exec odoo bash
+	docker compose -f docker-compose.dev.yml exec odoo_dev bash
 
 psql:
-	docker compose exec db psql -U $${POSTGRES_USER:-odoo}
+	docker compose -f docker-compose.dev.yml exec db_dev psql -U $${POSTGRES_USER:-odoo}
 
 test:
-	docker compose run --rm odoo \
+	docker compose -f docker-compose.dev.yml run --rm odoo_dev \
 		odoo --test-enable --test-tags /worklog -i worklog -d odoo_test --stop-after-init --log-level=test
