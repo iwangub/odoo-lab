@@ -2,8 +2,8 @@ provider "hcloud" {
   token = var.hcloud_token
 }
 
-resource "hcloud_firewall" "odoo_firewall" {
-  name = "odoo-lab"
+resource "hcloud_firewall" "odoo_lab_firewall" {
+  name = "odoo-lab-firewall"
 
   rule {
     direction  = "in"
@@ -28,19 +28,15 @@ resource "hcloud_firewall" "odoo_firewall" {
 }
 
 resource "hcloud_ssh_key" "main" {
-  name = "ssh-key"
+  name       = "ssh-key"
   public_key = file("~/.ssh/id_ed25519.pub")
 }
 
 resource "hcloud_server" "web" {
-  name         = "odoo-${var.odoo_version}"
+  name         = var.hcloud_server_name
   image        = "ubuntu-24.04"
   server_type  = "cx23"
   location     = "nbg1"
   ssh_keys     = [hcloud_ssh_key.main.id]
-  firewall_ids = [hcloud_firewall.odoo_firewall.id]
-}
-
-output "server_ip" {
-  value = hcloud_server.web.ipv4_address
+  firewall_ids = [hcloud_firewall.odoo_lab_firewall.id]
 }
