@@ -30,6 +30,13 @@
     owner: deploy
     mode: "0750"
 
+- name: Deploy .env
+  ansible.builtin.copy:
+    content: "{{ lookup('env', 'DEPLOY_ENV') }}"
+    dest: /opt/odoo/.env
+    owner: deploy
+    mode: "0600"
+
 - name: Set ownership of /opt/odoo to deploy
   ansible.builtin.file:
     path: /opt/odoo

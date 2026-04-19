@@ -19,3 +19,23 @@
     name: deploy
     groups: docker
     append: true
+
+- name: Disable SSH password authentication
+  ansible.builtin.copy:
+    content: "PasswordAuthentication no\n"
+    dest: /etc/ssh/sshd_config.d/99-hardening.conf
+    mode: "0644"
+
+- name: Restart sshd
+  ansible.builtin.systemd:
+    name: sshd
+    state: restarted
+
+- name: Set dc alias for deploy and root
+  ansible.builtin.lineinfile:
+    path: "{{ item }}"
+    line: "alias dc='docker compose'"
+    create: true
+  loop:
+    - /home/deploy/.bashrc
+    - /root/.bashrc
