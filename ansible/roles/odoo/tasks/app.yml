@@ -10,6 +10,7 @@
   file:
     path: "{{ item }}"
     state: directory
+    owner: deploy
     mode: "0755"
   loop:
     - /opt/odoo/scripts
@@ -28,3 +29,10 @@
     dest: /opt/odoo/scripts/db-replicate.sh
     owner: deploy
     mode: "0750"
+
+- name: Set ownership of /opt/odoo to deploy
+  ansible.builtin.file:
+    path: /opt/odoo
+    owner: deploy
+    group: deploy
+    recurse: true
