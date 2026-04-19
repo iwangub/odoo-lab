@@ -1,6 +1,6 @@
 ---
 - name: Odoo server setup
   hosts: server
-  become: false
+  become: true
   roles:
     - odoo
