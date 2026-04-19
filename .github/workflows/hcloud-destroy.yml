@@ -1,4 +1,4 @@
-name: Hcloud Destroy
+name: Hcloud - Destroy
 
 on:
   workflow_dispatch:

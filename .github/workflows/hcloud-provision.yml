@@ -1,4 +1,4 @@
-name: Provision Hcloud
+name: Hcloud - Provision
 
 on:
   workflow_dispatch:
