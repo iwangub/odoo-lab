@@ -1,0 +1,15 @@
+---
+- name: Create logfile
+  file:
+    path: /opt/odoo/backups/logs/odoo-backup.log
+    state: touch
+    owner: deploy
+    mode: "0644"
+
+- name: Cronjob for nightly backup
+  cron:
+    name: "odoo nightly backup"
+    minute: "0"
+    hour: "2"
+    job: "/opt/odoo/scripts/backup.sh >> /opt/odoo/backups/logs/odoo-backup.log 2>&1"
+    user: deploy

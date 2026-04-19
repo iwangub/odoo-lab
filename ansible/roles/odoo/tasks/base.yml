@@ -1,0 +1,24 @@
+---
+- name: Install dependencies
+  become: true
+  ansible.builtin.apt:
+    name:
+      - git
+      - docker.io
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+
+- name: Enable and start Docker
+  become: true
+  ansible.builtin.systemd:
+    name: docker
+    enabled: true
+    state: started
+
+- name: Add deploy user to docker group
+  become: true
+  ansible.builtin.user:
+    name: deploy
+    groups: docker
+    append: true

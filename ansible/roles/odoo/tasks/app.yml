@@ -1,0 +1,30 @@
+---
+- name: Clone odoo-lab repo
+  ansible.builtin.git:
+    repo: https://github.com/iwangub/odoo-lab.git
+    dest: /opt/odoo
+    version: 18.0-dev
+    force: false
+
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - /opt/odoo/scripts
+    - /opt/odoo/backups/logs
+
+- name: Copy backup.sh
+  copy:
+    src: backup.sh
+    dest: /opt/odoo/scripts/backup.sh
+    owner: deploy
+    mode: "0750"
+
+- name: Copy db-replicate.sh
+  copy:
+    src: db-replicate.sh
+    dest: /opt/odoo/scripts/db-replicate.sh
+    owner: deploy
+    mode: "0750"

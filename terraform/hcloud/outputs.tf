@@ -5,3 +5,7 @@ output "server_ip" {
 output "dns" {
   value = "https://${var.cloudflare_domain}.dev-lab.dev"
 }
+
+output "dns_domain" {
+  value = "${var.cloudflare_domain}.dev-lab.dev"
+}

@@ -1,0 +1,91 @@
+name: Provision Hcloud
+
+on:
+  workflow_dispatch:
+    inputs:
+      subdomain:
+        description: "Subdomain (e.g. 'test' → test.dev-lab.dev)"
+        default: "test"
+      server_name:
+        description: "Hetzner server name"
+        default: "odoo"
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    outputs:
+      server_ip: ${{ steps.tf_output.outputs.server_ip }}
+      dns_domain: ${{ steps.tf_output.outputs.dns_domain }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform init
+        working-directory: terraform/hcloud
+        run: terraform init
+
+      - name: Terraform apply
+        working-directory: terraform/hcloud
+        env:
+          TF_VAR_hcloud_token: ${{ secrets.HCLOUD_TOKEN }}
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_hcloud_server_name: ${{ inputs.server_name }}
+          TF_VAR_cloudflare_domain: ${{ inputs.subdomain }}
+          TF_VAR_ssh_public_key: ${{ secrets.HCLOUD_SSH_PUBLIC_KEY }}
+        run: terraform apply -auto-approve
+
+      - name: Read outputs
+        id: tf_output
+        working-directory: terraform/hcloud
+        run: |
+          echo "server_ip=$(terraform output -raw server_ip)" >> $GITHUB_OUTPUT
+          echo "dns_domain=$(terraform output -raw dns_domain)" >> $GITHUB_OUTPUT
+
+      - name: Upload tfstate
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfstate-hcloud
+          path: terraform/hcloud/terraform.tfstate
+
+  ansible:
+    name: Ansible
+    needs: terraform
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Prepare SSH key
+        run: |
+          echo "${{ secrets.HCLOUD_SSH_KEY }}" > /tmp/deploy_key
+          chmod 600 /tmp/deploy_key
+
+      - name: Wait for SSH
+        run: |
+          for i in $(seq 1 24); do
+            nc -z ${{ needs.terraform.outputs.server_ip }} 22 && break
+            echo "Waiting for SSH... ($i/24)"
+            sleep 5
+          done
+
+      - name: Run Ansible playbook
+        env:
+          HOST: ${{ needs.terraform.outputs.server_ip }}
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+        run: |
+          ansible-playbook \
+            -i ansible/inventory.yml \
+            ansible/playbook.yml \
+            --extra-vars "domain=${{ needs.terraform.outputs.dns_domain }}"
+
+      - name: Cleanup
+        if: always()
+        run: rm -f /tmp/deploy_key
+        

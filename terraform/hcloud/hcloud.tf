@@ -29,7 +29,7 @@ resource "hcloud_firewall" "odoo_lab_firewall" {
 
 resource "hcloud_ssh_key" "main" {
   name       = "ssh-key"
-  public_key = file("~/.ssh/id_ed25519.pub")
+  public_key = var.ssh_public_key
 }
 
 resource "hcloud_server" "web" {
@@ -39,4 +39,15 @@ resource "hcloud_server" "web" {
   location     = "nbg1"
   ssh_keys     = [hcloud_ssh_key.main.id]
   firewall_ids = [hcloud_firewall.odoo_lab_firewall.id]
+
+  user_data = <<-EOF
+    #cloud-config
+    users:
+      - name: deploy
+        groups: sudo
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        ssh_authorized_keys:
+          - ${var.ssh_public_key}
+  EOF
 }

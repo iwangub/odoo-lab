@@ -1,0 +1,35 @@
+name: Hcloud Destroy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  destroy:
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+
+      - name: Download tfstate
+        uses: actions/download-artifact@v4
+        with:
+          name: tfstate-hcloud
+          path: terraform/hcloud
+
+      - name: Terraform init
+        working-directory: terraform/hcloud
+        run: terraform init
+
+      - name: Terraform destroy
+        working-directory: terraform/hcloud
+        env:
+          TF_VAR_hcloud_token: ${{ secrets.HCLOUD_TOKEN }}
+          TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          TF_VAR_ssh_public_key: ${{ secrets.HCLOUD_SSH_PUBLIC_KEY }}
+        run: terraform destroy -auto-approve
+        

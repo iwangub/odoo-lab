@@ -2,6 +2,8 @@ variable "hcloud_token" {
   sensitive = true
 }
 
+variable "ssh_public_key" {}
+
 variable "hcloud_server_name" {
   default = "odoo_lab"
 }
