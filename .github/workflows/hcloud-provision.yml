@@ -26,11 +26,14 @@ jobs:
 
       - name: Terraform init
         working-directory: terraform/hcloud
+        env:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
         run: terraform init
 
       - name: Terraform apply
         working-directory: terraform/hcloud
         env:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
           TF_VAR_hcloud_token: ${{ secrets.HCLOUD_TOKEN }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
@@ -45,12 +48,6 @@ jobs:
         run: |
           echo "server_ip=$(terraform output -raw server_ip)" >> $GITHUB_OUTPUT
           echo "dns_domain=$(terraform output -raw dns_domain)" >> $GITHUB_OUTPUT
-
-      - name: Upload tfstate
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfstate-hcloud
-          path: terraform/hcloud/terraform.tfstate
 
   ansible:
     name: Ansible

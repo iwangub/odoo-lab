@@ -5,7 +5,7 @@
     name:
       - git
       - docker.io
-      - docker-compose-plugin
+      - docker-compose-v2
     state: present
     update_cache: true
 

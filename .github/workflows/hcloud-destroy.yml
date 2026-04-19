@@ -14,19 +14,16 @@ jobs:
         with:
           terraform_wrapper: false
 
-      - name: Download tfstate
-        uses: actions/download-artifact@v4
-        with:
-          name: tfstate-hcloud
-          path: terraform/hcloud
-
       - name: Terraform init
         working-directory: terraform/hcloud
+        env:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
         run: terraform init
 
       - name: Terraform destroy
         working-directory: terraform/hcloud
         env:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
           TF_VAR_hcloud_token: ${{ secrets.HCLOUD_TOKEN }}
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
