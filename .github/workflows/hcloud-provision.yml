@@ -45,6 +45,8 @@ jobs:
       - name: Read outputs
         id: tf_output
         working-directory: terraform/hcloud
+        env:
+          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
         run: |
           echo "server_ip=$(terraform output -raw server_ip)" >> $GITHUB_OUTPUT
           echo "dns_domain=$(terraform output -raw dns_domain)" >> $GITHUB_OUTPUT

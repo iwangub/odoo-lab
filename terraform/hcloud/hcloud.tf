@@ -28,7 +28,7 @@ resource "hcloud_firewall" "odoo_lab_firewall" {
 }
 
 resource "hcloud_ssh_key" "main" {
-  name       = "ssh-key"
+  name       = "ssh-key-${var.hcloud_server_name}"
   public_key = var.ssh_public_key
 }
 
