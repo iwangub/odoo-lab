@@ -78,6 +78,7 @@ jobs:
         env:
           HOST: ${{ needs.terraform.outputs.server_ip }}
           ANSIBLE_HOST_KEY_CHECKING: "False"
+          DEPLOY_ENV: ${{ secrets.DEPLOY_ENV }}
         run: |
           ansible-playbook \
             -i ansible/inventory.yml \
