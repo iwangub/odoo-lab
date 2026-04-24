@@ -43,3 +43,10 @@
     owner: deploy
     group: deploy
     recurse: true
+
+- name: Render nginx config
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /opt/odoo/nginx/nginx.conf
+    owner: deploy
+    mode: "0644"
