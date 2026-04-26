@@ -50,3 +50,13 @@
     dest: /opt/odoo/nginx/nginx.conf
     owner: deploy
     mode: "0644"
+
+- name: Start Odoo stack
+  ansible.builtin.command:
+    cmd: docker compose up -d odoo
+    chdir: /opt/odoo
+
+- name: Start nginx
+  ansible.builtin.command:
+    cmd: docker compose up -d nginx
+    chdir: /opt/odoo
